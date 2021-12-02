@@ -6,7 +6,7 @@
   "scripts": {
     "tsc:ver": "tsc",
     "ts-node": "ts-node index.ts",
-    "nodemon": "nodemon"
+    "start": "nodemon"
   },
   "dependencies": {
     "axios": "^0.20.0",

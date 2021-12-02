@@ -1,5 +1,6 @@
 express/models/.env
 express/node_modules
+logs/*
 
 .env
 .DS_Store

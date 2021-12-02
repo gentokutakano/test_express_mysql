@@ -11,7 +11,7 @@ services:
     environment:
       CHOKIDAR_USEPOLLING: 1
       TZ: Asia/Tokyo
-    command: yarn nodemon
+    command: yarn start
     networks:
       - default
     depends_on:

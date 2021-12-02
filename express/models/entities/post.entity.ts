@@ -17,15 +17,9 @@ export class Post extends Model<Post> {
   @Column(DataType.INTEGER({ length: 11 }))
   readonly id!: number
 
-  @Column(DataType.STRING(255))
-  message!: string
-
   @Column(DataType.INTEGER({ length: 11 }))
   user_id!: number
 
-  @Column(DataType.DATE())
-  created_at!: string
-
-  @Column(DataType.DATE())
-  updated_at!: string
+  @Column(DataType.STRING(255))
+  content!: string
 }

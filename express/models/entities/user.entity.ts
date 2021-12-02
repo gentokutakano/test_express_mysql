@@ -22,10 +22,4 @@ export class User extends Model<User> {
 
   @Column(DataType.INTEGER({ length: 11 }))
   age!: number
-
-  @Column(DataType.DATE())
-  created_at!: string
-
-  @Column(DataType.DATE())
-  updated_at!: string
 }

@@ -27,16 +27,14 @@ export class GetPosts {
 
   async getPosts(): Promise<getPostsResponse[]> {
     const data = await Post.findAll({
-      attributes: ['id', 'user_id', 'message', 'created_at', 'updated_at'],
+      attributes: ['id', 'user_id', 'content'],
     })
 
     return data.map((v) => {
       return {
         id: v.id,
         user_id: v.user_id,
-        message: v.message,
-        created_at: dayjs(v.created_at).format('YYYY年M月D日 HH時mm分'),
-        updated_at: dayjs(v.updated_at).format('YYYY年M月D日 HH時mm分'),
+        content: v.content,
       }
     })
   }

@@ -27,7 +27,7 @@ export class GetUsers {
 
   async getUsers(): Promise<getUsersResponse[]> {
     const data = await User.findAll({
-      attributes: ['id', 'name', 'age', 'created_at', 'updated_at'],
+      attributes: ['id', 'name', 'age'],
     })
 
     return data.map((v) => {
@@ -35,8 +35,6 @@ export class GetUsers {
         id: v.id,
         name: v.name,
         age: v.age,
-        created_at: dayjs(v.created_at).format('YYYY年M月D日 HH時mm分'),
-        updated_at: dayjs(v.updated_at).format('YYYY年M月D日 HH時mm分'),
       }
     })
   }
