@@ -1,0 +1,40 @@
+version: "3"
+services:
+  server:
+    container_name: server
+    build: ./docker/express
+    ports:
+      - 3000:3000
+    volumes:
+      - ./express:/express
+    tty: true
+    environment:
+      CHOKIDAR_USEPOLLING: 1
+      TZ: Asia/Tokyo
+    command: yarn nodemon
+    networks:
+      - default
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: mysql:8.0
+    volumes:
+      - express_data:/var/lib/mysql
+      - ./logs:/var/log/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - TZ=${TZ}
+    ports:
+      - ${DB_PORT}:3306
+
+networks:
+  default:
+
+volumes:
+  express_data:
