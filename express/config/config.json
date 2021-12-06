@@ -1,9 +1,9 @@
 {
   "development": {
     "host": "db",
-    "username": "ryota",
+    "username": "gen",
     "password": "test",
-    "database": "express_db",
+    "database": "sample_db",
     "dialect": "mysql"
   }
 }
