@@ -24,7 +24,7 @@ export class PutUser {
     //idが存在しない場合エラーを返す
     //ボディを渡す
     //ボディがnameとAge以外のものが含まれていたらエラー返す
-    //name: String Age: number
+    //name: String Age: number  
     await this.putUser()
     return this.handler.json<boolean>(true)
   }
