@@ -5,7 +5,9 @@ import router from './routes/index'
 import bodyParser from 'body-parser'
 
 const app = express()
+//セキュリティ的に堅牢化するライブラリ
 app.use(helmet())
+
 app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: true }))

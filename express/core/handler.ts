@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ErrorCode } from '../constants/error'
+import { ErrorCode, SuccessCode } from '../constants/error'
 
 /**
  * APIのハンドリングをする機能
@@ -19,5 +19,12 @@ export class Handler {
    */
   error(error: ErrorCode): void {
     this.res.status(error.status).send({ error: error })
+  }
+
+    /**
+   * 正常の送信
+   */
+  success(success: SuccessCode): void{
+    this.res.status(success.status).send({success: success})
   }
 }

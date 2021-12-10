@@ -4,6 +4,12 @@ export type ErrorCode = {
   message: string
 }
 
+export type SuccessCode = {
+  status: number
+  type: string
+  message: string
+}
+
 /**
  * パラメーターが誤っている場合のエラー
  */
@@ -11,6 +17,15 @@ export const PARAMETER_INVALID: ErrorCode = {
   status: 400,
   type: 'PARAMETER_INVALID',
   message: 'The parameter is invalid.',
+}
+
+/**
+ * パラメーターが成功した場合
+ */
+export const PARAMETER_VALIDITY: ErrorCode = {
+  status: 200,
+  type: 'PARAMETER_VALIDITY',
+  message: 'The parameter is validity.',
 }
 
 /**

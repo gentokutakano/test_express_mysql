@@ -7,7 +7,7 @@ const router = Express.Router()
 
 router.get('/', (req, res, next) => {
   const handler = new Handler(req, res)
-  return handler.json<string>("Hello Gen!!!!!!!!!")
+  return handler.json<string>("Hello Gen!!")
 })
 
 router.get('/gen', (req, res, next) => {
