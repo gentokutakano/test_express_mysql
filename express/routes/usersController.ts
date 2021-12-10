@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { CreateUser } from './users/create_user'
+import { DeleteUser } from './users/delete_user'
 import { GetUsers } from './users/get_users'
 import { PutUser } from './users/put_user'
 
@@ -16,7 +17,11 @@ router.put('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   // console.log(req.params);
-  new CreateUser(req, res).main()
+  new CreateUser(req, res).main().catch(next)
+})
+
+router.delete('/:id', (req, res, next) => {
+  new DeleteUser(req, res).main().catch(next)
 })
 
 

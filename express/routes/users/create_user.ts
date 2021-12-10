@@ -1,5 +1,4 @@
-import { Handler } from "../../core/handler";
-
+import { Handler } from "../../core/handler"
 import { Request, Response } from 'express'
 import { User } from "../../models/entities/user.entity";
 
