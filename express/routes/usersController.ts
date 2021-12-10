@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { CreateUser } from './users/create_user'
 import { GetUsers } from './users/get_users'
 import { PutUser } from './users/put_user'
 
@@ -11,6 +12,11 @@ router.get('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   console.log(req.params);
   new PutUser(req, res).main().catch(next)
+})
+
+router.post('/', (req, res, next) => {
+  // console.log(req.params);
+  new CreateUser(req, res).main()
 })
 
 
