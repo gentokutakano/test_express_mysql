@@ -16,7 +16,7 @@ export class CreateUser{
     return this.handler.json<void>(data)
   }
 
-  async createUser(register?: User) {
+  async createUser(register?: User): Promise<void> {
     try {
       const user = new User()
 

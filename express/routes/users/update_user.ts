@@ -1,4 +1,3 @@
-import { filter } from 'bluebird'
 import { Request, Response } from 'express'
 import { PARAMETER_INVALID, PARAMETER_VALIDITY } from '../../constants/error'
 import { Handler } from '../../core/handler'
@@ -13,10 +12,13 @@ type TPutParams = {
 
 export class PutUser {
   handler: Handler
+  //TODO 型指定する
+  // paramsId: string
   params: TPutParams
 
   constructor(req: any, res: Response) {
     this.handler = new Handler(req, res)
+    // this.paramsId = req.params.id
     this.params = { ...req.params, ...req.body }
 
   }
@@ -25,16 +27,7 @@ export class PutUser {
    * メイン処理
    */
   async main() {
-    const validParams = ["id", "name", "age"];
-
-    if (!this.params.id ||
-      !Number(this.params.id) ||
-      typeof this.params.name !== "string" ||
-      !Number(this.params.age) ||
-      !Object.keys(this.params).every(key => validParams.includes(key))) {
-      throw this.handler.error(PARAMETER_INVALID)
-    }
-
+    console.log(this.params.id, this.params.name, this.params.age, this.params)
     const data = await this.putUser()
     return this.handler.json<void>(data)
   }
@@ -50,6 +43,8 @@ export class PutUser {
     }
     ///存在するIdか確認
     const user = await User.findByPk<User>(this.params.id)
+
+    // console.log(typeof user, user)
 
     if (!user) {
       console.log("このユーザはいないっす")
