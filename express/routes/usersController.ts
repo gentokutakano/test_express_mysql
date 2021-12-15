@@ -11,12 +11,11 @@ router.get('/', (req, res, next) => {
 })
 
 router.put('/:id', (req, res, next) => {
-  console.log(req.params);
+  // console.log(req.params);
   new PutUser(req, res).main().catch(next)
 })
 
 router.post('/', (req, res, next) => {
-  // console.log(req.params);
   new CreateUser(req, res).main().catch(next)
 })
 

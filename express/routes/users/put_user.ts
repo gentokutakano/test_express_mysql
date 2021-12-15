@@ -5,8 +5,9 @@ import { Handler } from '../../core/handler'
 import { User } from '../../models/index'
 import { getUsersResponse } from '../../types'
 
+///TODO共通化
 type TPutParams = {
-  id: string
+  id: number
   name: string
   age: number
 }
@@ -18,14 +19,24 @@ export class PutUser {
   constructor(req: any, res: Response) {
     this.handler = new Handler(req, res)
     this.params = { ...req.params, ...req.body }
-
   }
 
   /**
    * メイン処理
    */
   async main() {
+
+
+    console.log(this.params);
+    ///TODO共通化
     const validParams = ["id", "name", "age"];
+
+    ///存在するIdか確認
+    const user = await User.findByPk<User>(this.params.id)
+    if (!user) {
+      console.log("このユーザidは存在しません")
+      throw this.handler.error(PARAMETER_INVALID)
+    }
 
     if (!this.params.id ||
       !Number(this.params.id) ||
@@ -35,27 +46,12 @@ export class PutUser {
       throw this.handler.error(PARAMETER_INVALID)
     }
 
-    const data = await this.putUser()
+    const data = await this.putUser(this.params)
     return this.handler.json<void>(data)
   }
 
   ///指定されたユーザIDを更新する
-  async putUser(updateJson?: User): Promise<void> {
-
-    if (!updateJson) {
-      updateJson = <User>{
-        name: "hand3",
-        age: 12,
-      }
-    }
-    ///存在するIdか確認
-    const user = await User.findByPk<User>(this.params.id)
-
-    if (!user) {
-      console.log("このユーザはいないっす")
-      throw this.handler.error(PARAMETER_INVALID)
-    }
-
+  async putUser(updateJson: TPutParams): Promise<void> {
     User.update(updateJson, {
       where: {
         id: this.params.id
