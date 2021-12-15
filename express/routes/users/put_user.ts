@@ -40,14 +40,12 @@ export class PutUser {
         throw this.handler.error(PARAMETER_INVALID)
       }
 
-      // console.log(User.findAll({ where: { name: "karukichi"} }))
-
     const data = await this.putUser()
-    return this.handler.json<void>(data)
+    return this.handler.json<boolean>(data)
   }
 
   ///指定されたユーザIDを更新する
-  async putUser(): Promise<void> {
+  async putUser(): Promise<boolean> {
     const value = {
       name: this.params.name,
       age: this.params.age
@@ -58,5 +56,7 @@ export class PutUser {
         id: this.params.id
       }
     })
+
+    return response[0] === 0 ? true : false
   }
 }

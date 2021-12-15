@@ -17,22 +17,20 @@ export class CreateUser{
   async main() {
     console.log(this.params)
 
-    ///共通化
-    if (!this.params.id ||
-      !Number(this.params.id) ||
-      this.params.name ? typeof this.params.name !== "string" : false  ||
-      typeof this.params.age !== "number" ) {
-        console.log("型の異なるパラメータを検出しました")
-        throw this.handler.error(PARAMETER_INVALID)
-      }
-
+    ///指定外のパラメータValueの確認
     const validParams: string[] = UserValidProperty;
     const paramsKey: string[] = Object.keys(this.params)
     const isKeySafe: boolean = paramsKey.every((Key => validParams.includes(Key)))
-    if (!isKeySafe) {
-      console.log("存在しないキーを検出しました")
-      throw this.handler.error(PARAMETER_INVALID)
-    }
+
+    ///パラメータ型の確認
+    if (!this.params.id ||
+      !Number(this.params.id) ||
+      (this.params.name && typeof this.params.name !== "string") ||
+      (this.params.age && typeof this.params.age !== "number" ||
+      !isKeySafe )) {
+        console.log("型の異なるパラメータを検出しました")
+        throw this.handler.error(PARAMETER_INVALID)
+      }
 
     ///名前重複エラー
     console.log(User.name.includes("karukichi"))
