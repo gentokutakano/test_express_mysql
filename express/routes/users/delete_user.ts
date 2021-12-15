@@ -14,20 +14,20 @@ export class DeleteUser {
   }
 
   async main() {
-    const data = await this.deleteUser()
-    return this.handler.json<void>(data)
-  }
-
-  ///指定されたユーザを削除
-  async deleteUser() {
     const user = await User.findByPk<User>(this.paramsId)
 
     if (!user) {
       console.log("削除できるユーザは見つかりませんでした")
       throw this.handler.error(PARAMETER_INVALID)
     }
+    const data = await this.deleteUser(user)
+    return this.handler.json<void>(data)
+  }
 
-    await user.destroy().then((recode) => {
+  ///指定されたユーザを削除
+  async deleteUser(deletedUserId: User) {
+
+    await deletedUserId.destroy().then((recode) => {
       console.log(`ユーザID：${this.paramsId}を削除しました`)
     })
   }

@@ -1,20 +1,12 @@
-import { filter } from 'bluebird'
 import { Request, Response } from 'express'
+import { UserValidProperty } from '../../constants/api_value'
 import { PARAMETER_INVALID, PARAMETER_VALIDITY } from '../../constants/error'
 import { Handler } from '../../core/handler'
 import { User } from '../../models/index'
-import { getUsersResponse } from '../../types'
-
-///TODO共通化
-type TPutParams = {
-  id: number
-  name: string
-  age: number
-}
-
+import { TUserParams, } from '../../types/permission_params_user'
 export class PutUser {
   handler: Handler
-  params: TPutParams
+  params: TUserParams
 
   constructor(req: any, res: Response) {
     this.handler = new Handler(req, res)
@@ -26,38 +18,45 @@ export class PutUser {
    */
   async main() {
 
+    ///指定外のパラメータValueの確認
+    const validParams: string[] = UserValidProperty;
+    const paramsKey: string[] = Object.keys(this.params)
+    const isKeySafe: boolean = paramsKey.every((Key => validParams.includes(Key)))
 
-    console.log(this.params);
-    ///TODO共通化
-    const validParams = ["id", "name", "age"];
-
-    ///存在するIdか確認
-    const user = await User.findByPk<User>(this.params.id)
-    if (!user) {
-      console.log("このユーザidは存在しません")
-      throw this.handler.error(PARAMETER_INVALID)
-    }
-
+    ///パラメータ型の確認
     if (!this.params.id ||
       !Number(this.params.id) ||
-      typeof this.params.name !== "string" ||
-      !Number(this.params.age) ||
-      !Object.keys(this.params).every(key => validParams.includes(key))) {
-      throw this.handler.error(PARAMETER_INVALID)
-    }
+      (this.params.name && typeof this.params.name !== "string") ||
+      (this.params.age && typeof this.params.age !== "number" ||
+      !isKeySafe )) {
+        console.log("型の異なるパラメータを検出しました")
+        throw this.handler.error(PARAMETER_INVALID)
+      }
 
-    const data = await this.putUser(this.params)
+      ///存在するIdの確認
+      const user = await User.findByPk<User>(this.params.id)
+      if (!user) {
+        console.log("このユーザidは存在しません")
+        throw this.handler.error(PARAMETER_INVALID)
+      }
+
+      // console.log(User.findAll({ where: { name: "karukichi"} }))
+
+    const data = await this.putUser()
     return this.handler.json<void>(data)
   }
 
   ///指定されたユーザIDを更新する
-  async putUser(updateJson: TPutParams): Promise<void> {
-    User.update(updateJson, {
+  async putUser(): Promise<void> {
+    const value = {
+      name: this.params.name,
+      age: this.params.age
+    }
+
+    const response = await User.update(value, {
       where: {
         id: this.params.id
       }
-    }).then((recode) => {
-      console.log(`ユーザID:[${this.params.id}]を更新しました。`)
     })
   }
 }
