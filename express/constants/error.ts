@@ -20,6 +20,15 @@ export const PARAMETER_INVALID: ErrorCode = {
 }
 
 /**
+ * nameが重複している場合のエラー
+ */
+ export const DUPLICATE_NAME: ErrorCode = {
+  status: 400,
+  type: 'DUPLICATE_NAME',
+  message: 'The duplicate is name.',
+}
+
+/**
  * パラメーターが成功した場合
  */
 export const PARAMETER_VALIDITY: ErrorCode = {

@@ -1,6 +1,6 @@
-import { Request, Response } from 'express'
+import { Request, response, Response } from 'express'
 import { UserValidProperty } from '../../constants/api_value'
-import { PARAMETER_INVALID, PARAMETER_VALIDITY } from '../../constants/error'
+import { DUPLICATE_NAME, PARAMETER_INVALID, PARAMETER_VALIDITY } from '../../constants/error'
 import { Handler } from '../../core/handler'
 import { User } from '../../models/index'
 import { TUserParams, } from '../../types/permission_params_user'
@@ -18,6 +18,9 @@ export class PutUser {
    */
   async main() {
 
+    ///TODO 処理フローおさらい
+    ///APIの記法確認
+
     ///指定外のパラメータValueの確認
     const validParams: string[] = UserValidProperty;
     const paramsKey: string[] = Object.keys(this.params)
@@ -33,15 +36,33 @@ export class PutUser {
         throw this.handler.error(PARAMETER_INVALID)
       }
 
-      ///存在するIdの確認
-      const user = await User.findByPk<User>(this.params.id)
-      if (!user) {
-        console.log("このユーザidは存在しません")
-        throw this.handler.error(PARAMETER_INVALID)
-      }
+    ///存在するIdの確認
+    const user = await User.findByPk<User>(this.params.id)
+    if (!user) {
+      console.log("このユーザidは存在しません")
+      throw this.handler.error(PARAMETER_INVALID)
+    }
+
+    const isUserByName = await this.getUserByName()
+    if (!isUserByName) {
+      console.log("このユーザnameすでに存在しています")
+      throw this.handler.error(DUPLICATE_NAME)
+    }
 
     const data = await this.putUser()
     return this.handler.json<boolean>(data)
+  }
+
+  async getUserByName(): Promise<boolean> {
+    const response = await User.findAll({
+      where: {
+      name: this.params.name
+      }
+    })
+
+    console.log(!response.length)
+
+    return !response.length
   }
 
   ///指定されたユーザIDを更新する
@@ -51,12 +72,13 @@ export class PutUser {
       age: this.params.age
     }
 
+    ///更新が成功した場合[1]を返す、失敗時[0]
     const response = await User.update(value, {
       where: {
         id: this.params.id
       }
     })
 
-    return response[0] === 0 ? true : false
+    return Boolean(response[0])
   }
 }

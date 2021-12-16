@@ -16,6 +16,14 @@ export class DeleteUser {
   async main() {
     const user = await User.findByPk<User>(this.paramsId)
 
+    console.log(undefined)
+    console.log(!undefined)
+    console.log(!null)
+    console.log(null)
+    console.log(!0)
+    console.log(0)
+
+    ///!でチェックできるもの[false, null, undefined, 0]
     if (!user) {
       console.log("削除できるユーザは見つかりませんでした")
       throw this.handler.error(PARAMETER_INVALID)

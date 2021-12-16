@@ -17,6 +17,10 @@ export class CreateUser{
   async main() {
     console.log(this.params)
 
+
+      ///nameがなかったら弾く
+  ///名前重複エラー
+
     ///指定外のパラメータValueの確認
     const validParams: string[] = UserValidProperty;
     const paramsKey: string[] = Object.keys(this.params)

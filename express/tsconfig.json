@@ -10,5 +10,10 @@
     "emitDecoratorMetadata": true,
     // "sourceMap": true, /* Generates corresponding '.map' file. */
   },
+  "baseUrl": "./",
+  "paths": {
+    "@constants": ["constants"],
+    "@constants/*": ["constants/*"]
+  },
   "include": ["./**/*"]
 }
