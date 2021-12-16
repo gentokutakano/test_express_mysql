@@ -21,7 +21,7 @@ export class PutUser {
     ///TODO 処理フローおさらい
     ///APIの記法確認
 
-    ///指定外のパラメータValueの確認
+    ///指定外のパラメータValueの準備
     const validParams: string[] = UserValidProperty;
     const paramsKey: string[] = Object.keys(this.params)
     const isKeySafe: boolean = paramsKey.every((Key => validParams.includes(Key)))
@@ -43,8 +43,9 @@ export class PutUser {
       throw this.handler.error(PARAMETER_INVALID)
     }
 
-    const isUserByName = await this.getUserByName()
-    if (!isUserByName) {
+    ///重複したユーザnameの確認
+    const isUniqueByName = await this.getUniqueByName()
+    if (!isUniqueByName) {
       console.log("このユーザnameすでに存在しています")
       throw this.handler.error(DUPLICATE_NAME)
     }
@@ -53,14 +54,13 @@ export class PutUser {
     return this.handler.json<boolean>(data)
   }
 
-  async getUserByName(): Promise<boolean> {
+  async getUniqueByName(): Promise<boolean> {
+    ///response = nameが重複した場合[user{...}], 重複しない場合[]
     const response = await User.findAll({
       where: {
       name: this.params.name
       }
     })
-
-    console.log(!response.length)
 
     return !response.length
   }
