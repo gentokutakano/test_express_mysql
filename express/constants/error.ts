@@ -20,6 +20,15 @@ export const PARAMETER_INVALID: ErrorCode = {
 }
 
 /**
+ * パラメーターが誤っている場合のエラー
+ */
+ export const NONEXISTENT_USER: ErrorCode = {
+  status: 400,
+  type: 'NONEXISTENT_USER',
+  message: 'The userId is not exist.',
+}
+
+/**
  * nameが重複している場合のエラー
  */
  export const DUPLICATE_NAME: ErrorCode = {
