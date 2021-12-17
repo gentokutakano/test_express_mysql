@@ -24,9 +24,9 @@ export class PutUser {
     ///APIの記法確認
 
     ///指定外のパラメータチェックの準備
-    const validParams: string[] = UserValidProperty;
-    const paramsKey: string[] = Object.keys(this.params)
-    const isKeySafe: boolean = paramsKey.every((Key => validParams.includes(Key)))
+    const validParams = UserValidProperty;
+    const paramsKey = Object.keys(this.params)
+    const isKeySafe = paramsKey.every((Key => validParams.includes(Key)))
 
     ///パラメータ型の確認
     if (!this.params.id ||
@@ -40,24 +40,23 @@ export class PutUser {
 
     ///存在するIdの確認
     const userId = await User.findByPk<User>(this.params.id)
-    if (!userId) {
-      console.log("このユーザidは存在しません")
-      throw this.handler.error(PARAMETER_INVALID)
-    }
+    if (!userId) this.handler.error(PARAMETER_INVALID)
 
-    ///重複したユーザnameの確認
     const isDuplicateName = await this.checkDuplicateName()
-    if (!isDuplicateName) return this.handler.error(DUPLICATE_NAME)
+    if (isDuplicateName) this.handler.error(DUPLICATE_NAME)
 
     const data = await this.putUser()
     return this.handler.json<boolean>(data)
   }
 
+  /**
+   * 重複したユーザnameの確認。
+   * 同じユーザ名からの変更はスキップする。
+   */
   async checkDuplicateName(): Promise<boolean> {
     if (!this.params.name) return true
 
-    ///response = nameが重複した場合[user{...}], 重複しない場合[]
-    ///同じユーザ名からの変更はスキップ
+    // response = nameが重複した場合[user{...}], 重複しない場合[]
     const response = await User.findAll({
       where: {
         name: this.params.name,
