@@ -4,10 +4,12 @@ import { DUPLICATE_NAME, PARAMETER_INVALID, PARAMETER_VALIDITY } from '../../con
 import { Handler } from '../../core/handler'
 import { User } from '../../models/index'
 import { TUserParams, } from '../../types/permission_params_user'
+import { Op } from 'sequelize'
 export class PutUser {
   handler: Handler
   params: TUserParams
 
+  ///TODO reqのanyを型指定
   constructor(req: any, res: Response) {
     this.handler = new Handler(req, res)
     this.params = { ...req.params, ...req.body }
@@ -21,7 +23,7 @@ export class PutUser {
     ///TODO 処理フローおさらい
     ///APIの記法確認
 
-    ///指定外のパラメータValueの準備
+    ///指定外のパラメータチェックの準備
     const validParams: string[] = UserValidProperty;
     const paramsKey: string[] = Object.keys(this.params)
     const isKeySafe: boolean = paramsKey.every((Key => validParams.includes(Key)))
@@ -37,29 +39,32 @@ export class PutUser {
       }
 
     ///存在するIdの確認
-    const user = await User.findByPk<User>(this.params.id)
-    if (!user) {
+    const userId = await User.findByPk<User>(this.params.id)
+    if (!userId) {
       console.log("このユーザidは存在しません")
       throw this.handler.error(PARAMETER_INVALID)
     }
 
     ///重複したユーザnameの確認
-    const isUniqueByName = await this.getUniqueByName()
-    if (!isUniqueByName) {
-      console.log("このユーザnameすでに存在しています")
-      throw this.handler.error(DUPLICATE_NAME)
-    }
+    const isDuplicateName = await this.checkDuplicateName()
+    if (!isDuplicateName) return this.handler.error(DUPLICATE_NAME)
 
     const data = await this.putUser()
     return this.handler.json<boolean>(data)
   }
 
-  async getUniqueByName(): Promise<boolean> {
+  async checkDuplicateName(): Promise<boolean> {
+    if (!this.params.name) return true
+
     ///response = nameが重複した場合[user{...}], 重複しない場合[]
+    ///同じユーザ名からの変更はスキップ
     const response = await User.findAll({
       where: {
-      name: this.params.name
-      }
+        name: this.params.name,
+        id: {
+          [Op.not]: this.params.id,
+        },
+      },
     })
 
     return !response.length
