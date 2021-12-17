@@ -1,8 +1,7 @@
 import { Handler } from "../../core/handler";
 import { Request, Response } from 'express'
 import { User } from "../../models";
-import { threadId } from "worker_threads";
-import { PARAMETER_INVALID } from "../../constants/error";
+import { NONEXISTENT_USER } from "../../constants/error";
 
 export class DeleteUser {
   handler: Handler
@@ -14,29 +13,19 @@ export class DeleteUser {
   }
 
   async main() {
-    const user = await User.findByPk<User>(this.paramsId)
 
-    console.log(undefined)
-    console.log(!undefined)
-    console.log(!null)
-    console.log(null)
-    console.log(!0)
-    console.log(0)
+    const userId = await User.findByPk<User>(this.paramsId)
+    if (!userId) throw this.handler.error(NONEXISTENT_USER)
 
-    ///!でチェックできるもの[false, null, undefined, 0]
-    if (!user) {
-      console.log("削除できるユーザは見つかりませんでした")
-      throw this.handler.error(PARAMETER_INVALID)
-    }
-    const data = await this.deleteUser(user)
+    const data = await this.deleteUser(userId)
     return this.handler.json<void>(data)
   }
 
   ///指定されたユーザを削除
   async deleteUser(deletedUserId: User) {
 
-    await deletedUserId.destroy().then((recode) => {
-      console.log(`ユーザID：${this.paramsId}を削除しました`)
-    })
+    const response = await deletedUserId.destroy()
+
+    console.log(response)
   }
 }
