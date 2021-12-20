@@ -20,13 +20,22 @@ export const PARAMETER_INVALID: ErrorCode = {
 }
 
 /**
- * パラメーターが誤っている場合のエラー
+ * ユーザが存在したかった場合のエラー
  */
  export const NONEXISTENT_USER: ErrorCode = {
   status: 400,
   type: 'NONEXISTENT_USER',
   message: 'The userId is not exist.',
-}
+ }
+
+ /**
+ * ユーザ名が存在しなかった場合のエラー
+ */
+  export const NONEXISTENT_USERNAME: ErrorCode = {
+    status: 400,
+    type: 'NONEXISTENT_USER',
+    message: 'The username is not exist.',
+  }
 
 /**
  * nameが重複している場合のエラー
@@ -35,15 +44,6 @@ export const PARAMETER_INVALID: ErrorCode = {
   status: 400,
   type: 'DUPLICATE_NAME',
   message: 'The duplicate is name.',
-}
-
-/**
- * パラメーターが成功した場合
- */
-export const PARAMETER_VALIDITY: ErrorCode = {
-  status: 200,
-  type: 'PARAMETER_VALIDITY',
-  message: 'The parameter is validity.',
 }
 
 /**

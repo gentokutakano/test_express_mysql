@@ -1,6 +1,6 @@
 import { Request, response, Response } from 'express'
 import { UserValidProperty } from '../../constants/api_value'
-import { DUPLICATE_NAME, NONEXISTENT_USER, PARAMETER_INVALID, PARAMETER_VALIDITY } from '../../constants/error'
+import { DUPLICATE_NAME, NONEXISTENT_USER, PARAMETER_INVALID} from '../../constants/error'
 import { Handler } from '../../core/handler'
 import { User } from '../../models/index'
 import { TUserParams, } from '../../types/permission_params_user'
@@ -37,10 +37,10 @@ export class PutUser {
 
     ///userIdが存在するか確認
     const userId = await User.findByPk<User>(this.params.id)
-    if (!userId) this.handler.error(NONEXISTENT_USER)
+    if (!userId) throw this.handler.error(NONEXISTENT_USER)
 
     const isDuplicateName = await this.checkDuplicateName()
-    if (isDuplicateName) this.handler.error(DUPLICATE_NAME)
+    if (isDuplicateName) throw this.handler.error(DUPLICATE_NAME)
 
     const data = await this.putUser()
     return this.handler.json<boolean>(data)
@@ -63,10 +63,12 @@ export class PutUser {
       },
     })
 
-    return !response.length
+    return response.length >= 1 ? true : false
   }
 
-  ///指定したユーザIDを更新する
+  /**
+   * 指定したユーザIDを更新する
+  **/
   async putUser(): Promise<boolean> {
     const value = {
       name: this.params.name,
