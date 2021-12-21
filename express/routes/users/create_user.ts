@@ -64,16 +64,13 @@ export class CreateUser{
    * ユーザを作成する
   **/
   async createUser(register: TUserParams): Promise<boolean> {
-      const registerUser: User = new User()
+    const registerUser: User = new User()
 
-      registerUser.name = register.name
-      registerUser.age = register.age
+    registerUser.name = register.name
+    registerUser.age = register.age
 
-      const response = await registerUser.save()
+    const response = await registerUser.save()
 
-      console.log(response)
-      console.log(Boolean(response))
-
-      return Boolean(response)
+    return Boolean(response)
   }
 }
