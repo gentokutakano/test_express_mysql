@@ -20,9 +20,9 @@ export const PARAMETER_INVALID: ErrorCode = {
 }
 
 /**
- * ユーザが存在したかった場合のエラー
+ * ユーザが存在しなかった場合のエラー
  */
- export const NONEXISTENT_USER: ErrorCode = {
+ export const NONEXISTENT: ErrorCode = {
   status: 400,
   type: 'NONEXISTENT_USER',
   message: 'The userId is not exist.',

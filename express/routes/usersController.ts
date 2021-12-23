@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { CreateUser } from './users/create_user'
+import { CreateUser } from './users/post_user'
 import { DeleteUser } from './users/delete_user'
 import { GetUsers } from './users/get_users'
 import { PutUser } from './users/put_user'
