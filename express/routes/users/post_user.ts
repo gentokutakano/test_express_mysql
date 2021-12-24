@@ -22,13 +22,6 @@ export class CreateUser{
    */
   async main() {
 
-    // Utils.checkValidParams(this.params, PostUserValidProperty)
-    // ///パラメータ型の確認
-    // console.log(this.params.name)
-    // // console.log(this.params.name.length < 0)
-    // console.log(!Number(this.params.age))
-    // console.log(Utils.checkValidParams(UserValidProperty, this.params))
-
     ///パラメータ型の確認
     if ((this.params.name && typeof this.params.name !== "string") ||
         (this.params.name && this.params.name.length < 0) ||
@@ -60,7 +53,6 @@ export class CreateUser{
       })
       return response.length >= 1 ? true : false
     } catch (e) {
-      // console.log(e + "")
       throw this.handler.error(DUPLICATE_NAME)
     }
   }

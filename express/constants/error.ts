@@ -22,11 +22,11 @@ export const PARAMETER_INVALID: ErrorCode = {
 /**
  * ユーザが存在しなかった場合のエラー
  */
- export const NONEXISTENT: ErrorCode = {
-  status: 400,
-  type: 'NONEXISTENT_USER',
-  message: 'The userId is not exist.',
- }
+  export const NONEXISTENT: ErrorCode = {
+    status: 400,
+    type: 'NONEXISTENT_USER',
+    message: 'The userId is not exist.',
+  }
 
  /**
  * ユーザ名が存在しなかった場合のエラー
@@ -40,17 +40,17 @@ export const PARAMETER_INVALID: ErrorCode = {
 /**
  * nameが重複している場合のエラー
  */
- export const DUPLICATE_NAME: ErrorCode = {
-  status: 400,
-  type: 'DUPLICATE_NAME',
-  message: 'The duplicate is name.',
+  export const DUPLICATE_NAME: ErrorCode = {
+    status: 400,
+    type: 'DUPLICATE_NAME',
+    message: 'The duplicate is name.',
 }
 
 /**
  * データが存在しない場合のエラー
  */
-export const NO_DATA_EXISTS: ErrorCode = {
-  status: 400,
-  type: 'NO_DATA_EXISTS',
-  message: 'No data exists.',
+  export const NO_DATA_EXISTS: ErrorCode = {
+    status: 400,
+    type: 'NO_DATA_EXISTS',
+    message: 'No data exists.',
 }
