@@ -2,8 +2,8 @@ import { Handler } from "../../core/handler"
 import { Response } from 'express'
 import { User } from "../../models/entities/user.entity";
 import { TUserParams } from "../../types/permission_params_user";
-import { DUPLICATE_NAME, NONEXISTENT_USERNAME, PARAMETER_INVALID } from "../../constants/error";
-import { PostUserValidProperty, UserValidProperty } from "../../constants/api_value";
+import { DUPLICATE_NAME, PARAMETER_INVALID } from "../../constants/error";
+import { PostUserValidProperty } from "../../constants/api_value";
 import Utils from "../../utils";
 
 export class CreateUser{
@@ -26,7 +26,7 @@ export class CreateUser{
     if ((this.params.name && typeof this.params.name !== "string") ||
         (this.params.name && this.params.name.length < 0) ||
       (!Number(this.params.age) ||
-        !Utils.checkValidParams(this.params, UserValidProperty)
+        !Utils.checkValidParams(this.params, PostUserValidProperty)
       )) {
         throw this.handler.error(PARAMETER_INVALID)
     }

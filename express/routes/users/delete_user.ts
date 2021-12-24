@@ -1,7 +1,7 @@
 import { Handler } from "../../core/handler";
 import { Request, Response } from 'express'
 import { User } from "../../models";
-import { NONEXISTENT } from "../../constants/error";
+import { NOT_EXISTS } from "../../constants/error";
 
 export class DeleteUser {
   handler: Handler
@@ -15,7 +15,7 @@ export class DeleteUser {
   async main() {
 
     const userId = await User.findByPk<User>(this.paramsId)
-    if (!userId) throw this.handler.error(NONEXISTENT)
+    if (!userId) throw this.handler.error(NOT_EXISTS)
     console.log(userId)
 
     const data = await this.deleteUser(userId)
