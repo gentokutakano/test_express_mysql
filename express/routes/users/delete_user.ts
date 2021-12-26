@@ -15,8 +15,7 @@ export class DeleteUser {
   async main() {
 
     const userId = await User.findByPk<User>(this.paramsId)
-    if (!userId) throw this.handler.error(NOT_EXISTS)
-    console.log(userId)
+    if (!userId) return this.handler.error(NOT_EXISTS)
 
     const data = await this.deleteUser(userId)
     return this.handler.json<boolean>(data)

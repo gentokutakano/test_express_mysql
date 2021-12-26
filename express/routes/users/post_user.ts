@@ -1,16 +1,16 @@
 import { Handler } from "../../core/handler"
-import { Response } from 'express'
+import { Response, Request } from 'express'
 import { User } from "../../models/entities/user.entity";
-import { TUserParams } from "../../types/permission_params_user";
-import { DUPLICATE_NAME, PARAMETER_INVALID } from "../../constants/error";
+import { TPostUserParams } from "../../types/permission_params_user";
+import { DUPLICATE_NAME, NOT_MATCH_PARAMETER, PARAMETER_INVALID } from "../../constants/error";
 import { PostUserValidProperty } from "../../constants/api_value";
 import Utils from "../../utils";
 
 export class CreateUser{
   handler: Handler
-  params: TUserParams
+  params: TPostUserParams
 
-  constructor(req: any, res: Response) {
+  constructor(req: Request, res: Response) {
     this.handler = new Handler(req, res)
     this.params = { ...req.params, ...req.body }
   }
@@ -22,18 +22,20 @@ export class CreateUser{
    */
   async main() {
 
+    // /型チェック
+    if (!Utils.checkMatchParams(this.params, PostUserValidProperty)) {
+      return this.handler.error(NOT_MATCH_PARAMETER)
+    }
+
     ///パラメータ型の確認
-    if ((this.params.name && typeof this.params.name !== "string") ||
-        (this.params.name && this.params.name.length < 0) ||
-      (!Number(this.params.age) ||
-        !Utils.checkValidParams(this.params, PostUserValidProperty)
-      )) {
-        throw this.handler.error(PARAMETER_INVALID)
+    if ((this.params.name && this.params.name.length < 0 && typeof this.params.name !== "string" ) ||
+      (!Number(this.params.age))) {
+        return this.handler.error(PARAMETER_INVALID)
     }
 
     ///名前重複の確認
     const isDuplicateName = await this.checkDuplicateName()
-    if (isDuplicateName) throw this.handler.error(DUPLICATE_NAME)
+    if (isDuplicateName) return this.handler.error(DUPLICATE_NAME)
 
     const data = await this.createUser(this.params)
     return this.handler.json<number>(data)
@@ -60,15 +62,20 @@ export class CreateUser{
   /**
    * ユーザを作成する
   **/
-  async createUser(register: TUserParams): Promise<number> {
-    const registerUser: User = new User()
+  async createUser(register: TPostUserParams): Promise<number> {
+    try {
 
-    registerUser.name = register.name
-    registerUser.age = register.age
+      const registerUser: User = new User()
 
-    const response = await registerUser.save()
-    if (!response) throw this.handler.error(PARAMETER_INVALID)
+      registerUser.name = register.name
+      registerUser.age = register.age
 
-    return response.id
+      const response = await registerUser.save()
+      if (!response) throw this.handler.error(PARAMETER_INVALID)
+
+      return response.id
+    } catch (err) {
+      throw new Error(String(err))
+    }
   }
 }

@@ -19,6 +19,39 @@ export const PARAMETER_INVALID: ErrorCode = {
   message: 'The parameter is invalid.',
 }
 
+export const NOT_MATCH_PARAMETER: ErrorCode = {
+  status: 400,
+  type: 'NOT_MATCH_PARAMETER',
+  message: 'The parameter is not match.',
+}
+
+/**
+ * usernameが誤っている場合のエラー
+ */
+export const INVALID_ID: ErrorCode = {
+status: 400,
+type: 'PARAMETER_INVALID',
+message: 'The Id is invalid.',
+}
+
+/**
+ * usernameが誤っている場合のエラー
+ */
+export const INVALID_USERNAME: ErrorCode = {
+status: 400,
+type: 'PARAMETER_INVALID',
+message: 'The username is invalid.',
+}
+
+/**
+ * ageが誤っている場合のエラー
+ */
+export const INVALID_AGE: ErrorCode = {
+  status: 400,
+  type: 'PARAMETER_INVALID',
+  message: 'The age is invalid.',
+}
+
 /**
  * ユーザが存在しなかった場合のエラー
  */
