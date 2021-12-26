@@ -1,16 +1,17 @@
-import { Request, response, Response } from 'express'
+import { Response, Request } from 'express'
+import { Op } from 'sequelize'
 import { UserValidProperty } from '../../constants/api_value'
-import { DUPLICATE_NAME, NONEXISTENT_USER, PARAMETER_INVALID, PARAMETER_VALIDITY } from '../../constants/error'
+import { DUPLICATE_NAME, NOT_EXISTS, PARAMETER_INVALID} from '../../constants/error'
 import { Handler } from '../../core/handler'
 import { User } from '../../models/index'
 import { TUserParams, } from '../../types/permission_params_user'
-import { Op } from 'sequelize'
+import Utils from '../../utils'
+
 export class PutUser {
   handler: Handler
   params: TUserParams
 
-  ///TODO reqのanyを型指定
-  constructor(req: any, res: Response) {
+  constructor(req: Request, res: Response) {
     this.handler = new Handler(req, res)
     this.params = { ...req.params, ...req.body }
   }
@@ -20,27 +21,23 @@ export class PutUser {
    */
   async main() {
 
-    ///指定外のパラメータチェックの準備
-    const validParams = UserValidProperty;
-    const paramsKey = Object.keys(this.params)
-    const isKeySafe = paramsKey.every((Key => validParams.includes(Key)))
+    ///指定外のパラメータ確認
+    if (!Utils.CheckPermissionParams(this.params, UserValidProperty)) return this.handler.error(PARAMETER_INVALID)
 
     ///パラメータ型の確認
-    if (!this.params.id ||
-      !Number(this.params.id) ||
+    if (!Number(this.params.id) ||
       (this.params.name && typeof this.params.name !== "string") ||
-      (this.params.age && typeof this.params.age !== "number" ||
-      !isKeySafe )) {
-        console.log("型の異なるパラメータを検出しました")
-        throw this.handler.error(PARAMETER_INVALID)
+      (this.params.age && !Number(this.params.age))) {
+        return this.handler.error(PARAMETER_INVALID)
       }
 
     ///userIdが存在するか確認
-    const userId = await User.findByPk<User>(this.params.id)
-    if (!userId) this.handler.error(NONEXISTENT_USER)
+    const userId =await User.findByPk<User>(this.params.id)
+    if (!userId)  return this.handler.error(NOT_EXISTS)
 
-    const isDuplicateName = await this.checkDuplicateName()
-    if (isDuplicateName) this.handler.error(DUPLICATE_NAME)
+    ///username重複確認 TODO
+    const user = this.checkDuplicateName()
+    if (!user) return this.handler.error(DUPLICATE_NAME)
 
     const data = await this.putUser()
     return this.handler.json<boolean>(data)
@@ -63,10 +60,12 @@ export class PutUser {
       },
     })
 
-    return !response.length
+    return response.length >= 1 ? true : false
   }
 
-  ///指定したユーザIDを更新する
+  /**
+   * 指定したユーザIDを更新する
+  **/
   async putUser(): Promise<boolean> {
     const value = {
       name: this.params.name,

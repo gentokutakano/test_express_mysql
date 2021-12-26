@@ -1,7 +1,7 @@
 import { Handler } from "../../core/handler";
 import { Request, Response } from 'express'
 import { User } from "../../models";
-import { NONEXISTENT_USER } from "../../constants/error";
+import { NOT_EXISTS } from "../../constants/error";
 
 export class DeleteUser {
   handler: Handler
@@ -15,17 +15,21 @@ export class DeleteUser {
   async main() {
 
     const userId = await User.findByPk<User>(this.paramsId)
-    if (!userId) throw this.handler.error(NONEXISTENT_USER)
+    if (!userId) return this.handler.error(NOT_EXISTS)
 
     const data = await this.deleteUser(userId)
-    return this.handler.json<void>(data)
+    return this.handler.json<boolean>(data)
   }
 
-  ///指定されたユーザを削除
-  async deleteUser(deletedUserId: User) {
+  /**
+   * 指定されたユーザを削除
+   * @param deleteUserId
+   * @returns
+   */
+  async deleteUser(deleteUserId: User): Promise<boolean>{
 
-    const response = await deletedUserId.destroy()
+    const response = await deleteUserId.destroy()
 
-    console.log(response)
+    return (Boolean(response))
   }
 }

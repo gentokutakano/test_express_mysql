@@ -19,31 +19,64 @@ export const PARAMETER_INVALID: ErrorCode = {
   message: 'The parameter is invalid.',
 }
 
-/**
- * パラメーターが誤っている場合のエラー
- */
- export const NONEXISTENT_USER: ErrorCode = {
+export const NOT_MATCH_PARAMETER: ErrorCode = {
   status: 400,
-  type: 'NONEXISTENT_USER',
-  message: 'The userId is not exist.',
+  type: 'NOT_MATCH_PARAMETER',
+  message: 'The parameter is not match.',
 }
 
 /**
- * nameが重複している場合のエラー
+ * usernameが誤っている場合のエラー
  */
- export const DUPLICATE_NAME: ErrorCode = {
+export const INVALID_ID: ErrorCode = {
+status: 400,
+type: 'PARAMETER_INVALID',
+message: 'The Id is invalid.',
+}
+
+/**
+ * usernameが誤っている場合のエラー
+ */
+export const INVALID_USERNAME: ErrorCode = {
+status: 400,
+type: 'PARAMETER_INVALID',
+message: 'The username is invalid.',
+}
+
+/**
+ * ageが誤っている場合のエラー
+ */
+export const INVALID_AGE: ErrorCode = {
+  status: 400,
+  type: 'PARAMETER_INVALID',
+  message: 'The age is invalid.',
+}
+
+/**
+ * ユーザが存在しなかった場合のエラー
+ */
+export const NOT_EXISTS: ErrorCode = {
+  status: 400,
+  type: 'NONEXISTENT_USER',
+  message: 'The Id is not exist.',
+}
+
+/**
+ * ユーザ名が存在しなかった場合のエラー
+ */
+export const NONEXISTENT_USERNAME: ErrorCode = {
+  status: 400,
+  type: 'NONEXISTENT_USER',
+  message: 'The username is not exist.',
+}
+
+/**
+* nameが重複している場合のエラー
+*/
+export const DUPLICATE_NAME: ErrorCode = {
   status: 400,
   type: 'DUPLICATE_NAME',
   message: 'The duplicate is name.',
-}
-
-/**
- * パラメーターが成功した場合
- */
-export const PARAMETER_VALIDITY: ErrorCode = {
-  status: 200,
-  type: 'PARAMETER_VALIDITY',
-  message: 'The parameter is validity.',
 }
 
 /**
