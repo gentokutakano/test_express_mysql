@@ -1,13 +1,16 @@
 # Express Server Template
-Express × TypeScript × MySQLテンプレート
+
+Express × TypeScript × mongo テンプレート
 
 ## Environment Variable
+
 - /.env
 - /express/models/.env
 
 ※ 共通の値をセット
 
 ## Build
+
 ```
 docker-compose build
 ```
@@ -31,6 +34,7 @@ docker-compose stop
 ```
 
 ## Versions
-- Node.js:  v12.13.1
-- Express:  v4.16.1
-- MySQL:    v8.0
+
+- Node.js: v12.13.1
+- Express: v4.16.1
+- MySQL: v8.0

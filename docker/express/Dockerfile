@@ -1,6 +1,6 @@
 FROM node:12.13-alpine
 
-RUN yarn global add express-generator sequelize-cli
+RUN yarn global add express-generator mongoose
 
 ENV NODE_PATH /usr/local/lib/node_modules
 
